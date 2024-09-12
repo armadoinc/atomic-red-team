@@ -1,0 +1,39 @@
+name: Sync `atomics` Directory with Red Canary
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight (adjust as needed)
+  workflow_dispatch:  # Allows for manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Git configuration
+      run: |
+        git config --global user.name 'Githhub SYNC'  
+        git config --global user.email 'githubsync@armmado.io'  
+
+
+    - name: Add upstream repository (Red Canary)
+      run: git remote add upstream https://github.com/redcanaryco/atomic-red-team.git
+
+    - name: Enable sparse checkout
+      run: |
+        git sparse-checkout init --cone
+        git sparse-checkout set atomics  # Only include the atomics directory
+
+    - name: Fetch upstream changes for the atomics directory
+      run: git fetch upstream
+
+    - name: Merge upstream changes into the forked master branch
+      run: |
+        git checkout master
+        git merge upstream/master
+        git push origin master
