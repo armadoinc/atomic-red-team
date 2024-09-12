@@ -6,20 +6,22 @@ This process ensures that your master branch is synchronized with Red Canary's m
 
 ## Instructions
 
-Submitting a PR with the `git` command line tool for [Windows](https://git-scm.com/download/win), [Linux](https://git-scm.com/download/linux) and [macOS](https://www.atlassian.com/git/tutorials/install-git).
+
+- Option 1: Use `git`  [Windows](https://git-scm.com/download/win), [Linux](https://git-scm.com/download/linux) and [macOS](https://www.atlassian.com/git/tutorials/install-git) to submit a PR
+- Option 2: Use the PR wrapper script.    
 
 Use the following git commands to clone and set up your repository before submitting a PR to Red Camary's atomic-red-team repository.
 
 ```bash
 # Clone your fork of the Red Canary Atomic Red Team™ Repository
-git clone https://github.com/<your-github-username>/atomic-red-team.git
+git clone https://github.com/armadoinc/atomic-red-team.git
 ​
 # Change directories into your cloned repository
 cd atomic-red-team
 ​
 # Set your origin (your fork) and your upstream (Red Canary's repo)
 # You have to do this every time you re-clone your repo, which likely is not often
-git remote set-url origin https://github.com/<your-github-username>/atomic-red-team.git
+git remote set-url origin https://github.com/armadoinc/atomic-red-team.git
 git remote add upstream https://github.com/redcanaryco/atomic-red-team.git
 ​
 # Update your forked master branch to match Red Canary's repo
