@@ -1,35 +1,49 @@
 ## Description
-This document provides ARMMADO employees with the necessary steps to keep their local master branch synchronized with the forked repository at https://github.com/armadoinc/atomic-red-team/. It ensures feature branches are created from an up-to-date master branch before submitting pull requests (PRs) to the upstream Red Canary repository.
+This document provides teams with the necessary steps to keep their local master branch synchronized with the *atomics* directory from the forked repository at https://github.com/armadoinc/atomic-red-team/. It ensures feature branches are created from an up-to-date master branch before submitting pull requests (PRs) to the upstream Red Canary repository.
 
 ## Objective
 This process ensures that your master branch is synchronized with Red Canary's master branch before creating a feature branch. The objective is to keep the master branch in sync, allowing for the smooth creation of new feature branches.
 
 ## Instructions
 
-
-- Option 1: Use `git`  [Windows](https://git-scm.com/download/win), [Linux](https://git-scm.com/download/linux) and [macOS](https://www.atlassian.com/git/tutorials/install-git) to submit a PR
-- Option 2: Use the PR wrapper script.    
+Submitting a PR with the `git` command line tool for [Windows](https://git-scm.com/download/win), [Linux](https://git-scm.com/download/linux) and [macOS](https://www.atlassian.com/git/tutorials/install-git).
 
 Use the following git commands to clone and set up your repository before submitting a PR to Red Camary's atomic-red-team repository.
 
 ```bash
-# Clone your fork of the Red Canary Atomic Red Team™ Repository
+# Clone the ARMADO fork  of the Red Canary Atomic Red Team™ Repository
 git clone https://github.com/armadoinc/atomic-red-team.git
 ​
 # Change directories into your cloned repository
 cd atomic-red-team
 ​
-# Set your origin (your fork) and your upstream (Red Canary's repo)
-# You have to do this every time you re-clone your repo, which likely is not often
+# Setting remote origin and upstream repositories is required after each time the forked repo is cloned. 
+# Set your origin to the ARMADO forked repository: armadoinc/atomic-red-team
 git remote set-url origin https://github.com/armadoinc/atomic-red-team.git
+
+# Set your upstream to Red Canary repository: (redcnaryco/atomic-red-team)
 git remote add upstream https://github.com/redcanaryco/atomic-red-team.git
+
 ​
-# Update your forked master branch to match Red Canary's repo
-# Do this right before creating a feature branch and working on it
+# Checkout master branch
 git checkout master
-git fetch --all
-git rebase upstream/master
+
+# Enable sparse checkout and set the atomics directory
+git sparse-checkout init --cone
+git sparse-checkout set atomics
+
+# Add Red Canary's repo as an upstream remote (if not already added)
+git remote add upstream https://github.com/redcanaryco/atomic-red-team.git
+
+# Fetch changes from Red Canary's upstream master branch
+git fetch upstream
+
+# Merge the changes from the upstream's atomics directory into your fork's master
+git merge upstream/master
+
+# Push the updates to your fork on GitHub
 git push origin master
+
 ​
 # Create a new branch from master to work on your new feature and switch to it (replace <branch-name> with whatever name you would like to use for your branch)
 git checkout -b <branch-name>
