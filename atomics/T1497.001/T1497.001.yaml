@@ -52,7 +52,106 @@ atomic_tests:
     name: sh
     elevation_required: false 
     command: | 
-      if (ioreg -l | grep -e Manufacturer -e 'Vendor Name' | grep -iE 'Oracle|VirtualBox|VMWare|Parallels') then echo 'Virtualization Environment detected'; fi;
+      if (ioreg -l | grep -e Manufacturer -e 'Vendor Name' | grep -iE 'Oracle|VirtualBox|VMWare|Parallels|qemu|xen') then echo 'Virtualization Environment detected'; fi;
+- name: Check Boot ROM Version (MacOS)
+    description: Check for Boot ROM versions associated with virtual machines (e.g., VMware, VirtualBox)
+    supported_platforms:
+      - macos
+    executor:
+      name: sh
+      command: |
+        system_profiler SPHardwareDataType | grep -i "Boot ROM Version"
+
+  - name: Check CPU Core Count (MacOS)
+    description: Check the number of CPU cores to identify typical VM configurations
+    supported_platforms:
+      - macos
+    executor:
+      name: sh
+      command: |
+        sysctl -n hw.physicalcpu
+
+  - name: Check Disk Drive Names (MacOS)
+    description: Check for disk drive names associated with virtual machines (e.g., VMware, VirtualBox)
+    supported_platforms:
+      - macos
+    executor:
+      name: sh
+      command: |
+        diskutil list | grep -iE "vbox|vmware|parallels|qemu|xen"
+
+  - name: Check Virtualization Files
+    description: Check for device files associated with virtual machines (e.g., /dev/vbox, /dev/vmware)
+    supported_platforms:
+      - macos
+    executor:
+      name: sh
+      command: |
+        ls /dev | grep -iE "vbox|vmware|parallels|qemu|xen"
+
+  - name: Check Hardware Model (MacOS)
+    description: Check for hardware mo dels associated with virtual machines (e.g., VMware, VirtualBox)
+    supported_platforms:
+      - macos
+    executor:
+      name: sh
+      command: |
+        sysctl -n hw.model | grep -iE "virtualbox|vmware|parallels|qemu|xen"
+
+  - name: Check Hyper-Threading (MacOS)
+    description: Check if hyperthreading is enabled, which is common in VMs
+    supported_platforms:
+      - macos
+    executor:
+      name: sh
+      command: |
+        sysctl -n machdep.cpu.thread_count
+
+  - name: Check Memory Size (MacOS)
+    description: Check the total memory size to identify typical VM configurations
+    supported_platforms:
+      - macos
+    executor:
+      name: sh
+      command: |
+        sysctl -n hw.memsize
+
+  - name: Check Network Adapters (MacOS)
+    description: Check for network adapters associated with virtual machines
+    supported_platforms:
+      - macos
+    executor:
+      name: sh
+      command: |
+        networksetup -listallhardwareports
+
+  - name: Check Virtualization Processes (MacOS)
+    description: Check for running processes associated with virtual machines (e.g., VMware, VirtualBox)
+    supported_platforms:
+      - macos
+    executor:
+      name: sh
+      command: |
+        ps aux | grep -iE "vmware|virtualbox|parallels|qemu|xen" | grep -v "grep"
+
+  - name: Check System Integrity Protection (MacOS)
+    description: Check the status of System Integrity Protection (SIP)
+    supported_platforms:
+      - macos
+    executor:
+      name: sh
+      command: |
+        csrutil status
+
+  - name: Check USB Vendor Name (MacOS)
+    description: Check for USB vendor names associated with virtual machines
+    supported_platforms:
+      - macos
+    executor:
+      name: sh
+      command: |
+        system_profiler SPUSBDataType 2>/dev/null | grep -i "Vendor Name" | grep -iE "virtualbox|vmware|parallels|qemu|xen"
+
 - name: Detect Virtualization Environment via WMI Manufacturer/Model Listing (Windows)
   auto_generated_guid: 4a41089a-48e0-47aa-82cb-5b81a463bc78
   description: |
